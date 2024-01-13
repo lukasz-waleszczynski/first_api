@@ -9,3 +9,8 @@ def get_exchange_rate(request):
         return JsonResponse({'rate': currency.rate})
     except Currency.DoesNotExist:
         return JsonResponse({'error': 'Cuddency not found.'})
+    
+def get_currency_names(request):
+    currencies = Currency.objects.values('name')
+    currency_names = [currency['name'] for currency in currencies]
+    return JsonResponse({'currency_names': currency_names})

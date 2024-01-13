@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Exchange</title>
+</head>
+<body>
+    <h1>Currency Exchange</h1>
+    <label for="currency">Select currency:</label>
+    <select id="currency">
+        <!-- Add options dynamically using JavaScript -->
+    </select>
+    <button onclick="getExchangeRate()">Get Exchange Rate</button>
+    <p id="exchangeRate"></p>
+
+    <script>
+        function getExchangeRate() {
+            const selectCurrency = document.getElementById('currency').value;
+            fetch(`/get_exchange_rate/?currency_name=${selectedCurrency}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('exchangeRate').innerText = 'Exchange Rate: ${data.rate}';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('exchangeRate').innerText = 'Error fetching exchange rate';
+            });
+        }
+
+        fetch('/get_currency_names/')
+            .then (response => response.json())
+            .then(data => {
+                const currencySelect = document.getElementById('currency');
+                data.forEach(currency => {
+                    const option = document.createElement('option');
+                    option.innerText = currency.name;
+                    currencySelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>
